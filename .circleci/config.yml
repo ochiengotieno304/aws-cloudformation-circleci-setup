@@ -1,14 +1,14 @@
 version: 2.1
 
 jobs:
-  check_aws_credentials:
+  unset_aws_session_token:
     docker:
       - image: amazon/aws-cli
     steps:
       - checkout
       - run:
-          name: check aws credentials
-          command: env | grep AWS
+          name: Unset AWS Session Token
+          command: unset AWS_SESSION_TOKEN
 
   create_infrastructure:
     docker:
@@ -27,5 +27,7 @@ jobs:
 workflows:
   myWorkflow:
     jobs:
-      - check_aws_credentials
-      - create_infrastructure
+      - unset_aws_session_token
+      - create_infrastructure:
+          requires:
+            - unset_aws_session_token
