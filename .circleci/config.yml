@@ -1,6 +1,15 @@
 version: 2.1
 
 jobs:
+  check_aws_credentials:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: check aws credentials
+          command: env | grep AWS
+
   create_infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -18,4 +27,5 @@ jobs:
 workflows:
   myWorkflow:
     jobs:
+      - check_aws_credentials
       - create_infrastructure
