@@ -1,14 +1,14 @@
 version: 2.1
 
 jobs:
-  unset_aws_session_token:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: Unset AWS Session Token
-          command: unset AWS_SESSION_TOKEN
+  # unset_aws_session_token:
+  #   docker:
+  #     - image: amazon/aws-cli
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Unset AWS Session Token
+  #         command: unset AWS_SESSION_TOKEN
 
   create_infrastructure:
     docker:
@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Create Cloudformation Stack
           command: |
-            aws cloudformation deploy \
+            aws cloudformation create-stack \
               --template-file template.yml \
               --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
               --region us-east-1
@@ -26,7 +26,5 @@ jobs:
 workflows:
   myWorkflow:
     jobs:
-      - unset_aws_session_token
-      - create_infrastructure:
-          requires:
-            - unset_aws_session_token
+      # - unset_aws_session_token
+      - create_infrastructure
