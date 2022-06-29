@@ -9,8 +9,6 @@ jobs:
       - run:
           name: Create Cloudformation Stack
           command: |
-            unset AWS_SESSION_TOKEN
-            unset AWS_SECURITY_TOKEN
             aws cloudformation deploy \
               --template-file template.yml \
               --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
