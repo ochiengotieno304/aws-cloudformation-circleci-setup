@@ -3,7 +3,8 @@ version: 2.1
 jobs:
   create_infrastructure:
     docker:
-      - image: cimg/aws-cli
+      - image: circleci/aws-cli@2.0.3
+
     steps:
       - checkout
       - run:
