@@ -25,6 +25,9 @@ jobs:
               --template-file template.yml \
               --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
               --region us-east-1
+      - run: return 1
+      - destroy_environment:
+          when: "on_fail"
 
   configure_infrastructure:
     docker:
@@ -59,16 +62,14 @@ jobs:
             URL="https://blog.udacity.com"
             if curl -s --head ${URL}
             then
-              return 1
-            else
               return 0
+            else
+              return 1
             fi
-      - destroy_environment:
-          when: "on_fail"
 
 workflows:
   myWorkflow:
     jobs:
-      # - create_infrastructure
+      - create_infrastructure
       # - configure_infrastructure
       - smoke_test
