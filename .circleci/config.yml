@@ -1,5 +1,14 @@
 version: 2.1
 
+commands:
+  destroy_environment:
+    steps:
+      - run:
+          name: Destroy Environment
+        when: on_fail
+        command: |
+          aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
+
 jobs:
   create_infrastructure:
     docker:
@@ -21,8 +30,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints:
-            ["79:42:fc:f3:b5:36:c6:73:8e:f1:ef:32:82:09:bd:94"]
+          fingerprints: ["79:42:fc:f3:b5:36:c6:73:8e:f1:ef:32:82:09:bd:94"]
       - run:
           name: install ssh
           command: |
@@ -49,15 +57,15 @@ jobs:
             URL="https://blog.udacity.com"
             if curl -s --head ${URL}
             then
-              return 0
-            else
               return 1
+            else
+              return 0
             fi
-      
+      - destroy_environment
 
 workflows:
   myWorkflow:
     jobs:
       # - create_infrastructure
-      - configure_infrastructure
+      # - configure_infrastructure
       - smoke_test
