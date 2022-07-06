@@ -24,6 +24,11 @@ jobs:
           fingerprints:
             ["79:42:fc:f3:b5:36:c6:73:8e:f1:ef:32:82:09:bd:94"]
       - run:
+          name: install ssh
+          command: |
+            apk add openssh
+
+      - run:
           name: Install Ansible
           command: |
             apk add --update ansible
