@@ -30,7 +30,24 @@ jobs:
       - run:
           name: Run Playbook and Configure Server
           command: |
+            ssh-keyscan -H 54.146.175.123 >> ~/.ssh/known_hosts
             ansible-playbook -i inventory main.yml
+
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run: apk add --update curl
+      - run:
+          name: Smoke Test
+          command: |
+            URL="https://blog.udacity.com"
+            if curl -s --head ${URL}
+            then
+              return 0
+            else
+              return 1
+            fi
       
 
 workflows:
@@ -38,3 +55,4 @@ workflows:
     jobs:
       # - create_infrastructure
       - configure_infrastructure
+      - smoke_test
